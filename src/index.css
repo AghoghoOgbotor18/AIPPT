@@ -1,0 +1,203 @@
+@import "tailwindcss";
+*{
+  box-sizing: border-box;
+}
+body {
+  background-color: #0a0c18;
+  color: #fff;
+  position: relative;
+  min-height: 100vh;
+}
+.stars::before {
+  content: "";
+  position: absolute;
+  width: 2px;
+  height: 2px;
+
+  background: transparent;
+
+  box-shadow:
+    10vw 5vh #fff,
+    20vw 40vh #fff,
+    50vw 30vh #fff,
+    80vw 10vh #fff,
+    30vw 70vh #fff,
+    60vw 85vh #fff,
+    90vw 50vh #fff,
+    15vw 80vh #fff,
+    75vw 20vh #fff,
+    40vw 90vh #fff,
+    95vw 30vh #fff,
+    55vw 15vh #fff,
+    5vw 60vh #fff,
+    65vw 60vh #fff,
+    70vw 60vh #fff,
+    95vw 80vh #fff,
+    100vw 100vh #fff;
+
+  filter: drop-shadow(0 0 6px #ffffff);
+
+  animation: twinkle 6s infinite ease-in-out;
+  z-index: -1;
+}
+
+@keyframes twinkle {
+  0%   { opacity: 0.3; }
+  50%  { opacity: 1; }
+  100% { opacity: 0.3; }
+}
+
+@layer base{
+  h3{
+    @apply text-5xl font-bold 
+  }
+}
+@layer components{
+  .btn{
+    background: linear-gradient(to right, #b856ca, #622ba4);
+    @apply py-2 px-3 rounded cursor-pointer bg-linear-to-r to-[#622ba4] from-[#b856ca] hover:bg-linear-to-r hover:from-[#622ba4] hover:to-[#b856ca] transition-all duration-300 ;
+  }
+  .stars{
+    
+  }
+  .animate-scroll-left {
+    display: flex;
+    width: max-content;
+    animation: scroll-left 20s linear infinite;
+  }
+  .cta{
+    background:linear-gradient(30deg, #622ba4,#b856ca);
+  }
+  .yellow{
+    background: radial-gradient(circle, #fbbf24 0%, transparent 90%);
+    top: 10%;
+    left: 5%;
+  }
+  .purple{
+    background: radial-gradient(circle, #a855f7 0%, transparent 70%);
+    top: 20%;
+    right: 10%;
+  }
+  .pink{
+    background: radial-gradient(circle, #ec4899 0%, transparent 90%);
+    bottom: 10%;
+    right: 20%;
+  }
+  .blue{
+    background: radial-gradient(circle, #3b82f6 0%, transparent 90%);
+    bottom: '15%';
+    left: 15%;
+  }
+          
+  .animate-fadeIn {
+    animation: fadeIn 0.5s ease-out;
+  }
+          
+  .animate-shake {
+    animation: shake 0.5s ease-out;
+  }
+}
+@layer utilities{
+  .glass-card{
+    @apply bg-white/5;
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 20px 20px 60px rgba(0, 0, 0, 0.3),
+                -20px -20px 60px rgba(255, 255, 255, 0.05),
+                inset 5px 5px 10px rgba(0, 0, 0, 0.2),
+                inset -5px -5px 10px rgba(255, 255, 255, 0.1);           
+  }
+  .animate-float-1 {
+    animation: float-1 20s ease-in-out infinite;
+  }
+
+  .animate-float-2 {
+    animation: float-2 18s ease-in-out infinite;
+  }
+
+  .animate-float-3 {
+    animation: float-3 22s ease-in-out infinite;
+  }
+
+  .animate-float-4 {
+    animation: float-4 19s ease-in-out infinite;
+  }
+}
+
+/* Infinite Left Scroll Animation */
+@keyframes scroll-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/*floating colors animation */
+@keyframes float-1 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(30px, -40px) scale(1.2);
+  }
+  50% {
+    transform: translate(-20px, -60px) scale(1.5);
+  }
+  75% {
+    transform: translate(-40px, 20px) scale(1.7);
+  }
+}
+
+@keyframes float-2 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(-40px, 30px) scale(1.2);
+  }
+  50% {
+    transform: translate(30px, 50px) scale(1.5);
+  }
+  75% {
+    transform: translate(20px, -30px) scale(1.8);
+  }
+}
+
+@keyframes float-3 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(40px, 20px) scale(1.4);
+  }
+  50% {
+    transform: translate(-30px, 40px) scale(1.6);
+  }
+  75% {
+    transform: translate(50px, -20px) scale(1.8);
+  }
+}
+
+@keyframes float-4 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(-30px, -30px) scale(1.2);
+  }
+  50% {
+    transform: translate(40px, -50px) scale(1.6);
+  }
+  75% {
+    transform: translate(-50px, 30px) scale(1.8);
+  }
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+        
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+

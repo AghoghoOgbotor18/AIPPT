@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import { auth } from "../firebase";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithPopup,
-} from "firebase/auth";
-import { FaFacebook, FaGoogle, FaCaretRight, FaTimes } from "react-icons/fa";
+import { FaFacebook, FaCaretRight, FaTimes } from "react-icons/fa";
 import googleImage from "../assets/Images/google.png";
 
 const Auth = ({ onSuccess, onClose }) => {
@@ -17,21 +10,22 @@ const Auth = ({ onSuccess, onClose }) => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const googleProvider = new GoogleAuthProvider();
-
+  // Lazy-loaded handlers
   const handleSignUp = async (e) => {
     e.preventDefault();
-    setError(""); // reset error
+    setError("");
     try {
       setIsLoading(true);
+      const { getAuth, createUserWithEmailAndPassword } = await import("firebase/auth");
+      const { auth } = await import("../firebase"); // your firebase config
       await createUserWithEmailAndPassword(auth, email, password);
       setSuccessMessage("Account created successfully!");
       setEmail("");
       setPassword("");
       setTimeout(() => onSuccess(), 1200);
     } catch (err) {
-      setError(err.message); // set error message
-      setTimeout(() => setError(""), 2000); // hide after 3 seconds
+      setError(err.message);
+      setTimeout(() => setError(""), 2000);
     } finally {
       setIsLoading(false);
     }
@@ -42,14 +36,16 @@ const Auth = ({ onSuccess, onClose }) => {
     setError("");
     try {
       setIsLoading(true);
+      const { getAuth, signInWithEmailAndPassword } = await import("firebase/auth");
+      const { auth } = await import("../firebase");
       await signInWithEmailAndPassword(auth, email, password);
       setSuccessMessage("Login successful!");
       setEmail("");
       setPassword("");
       setTimeout(() => onSuccess(), 1200);
     } catch (err) {
-      setError(err.message); // set error message
-      setTimeout(() => setError(""), 2000); // hide after 3 seconds
+      setError(err.message);
+      setTimeout(() => setError(""), 2000);
     } finally {
       setIsLoading(false);
     }
@@ -59,12 +55,15 @@ const Auth = ({ onSuccess, onClose }) => {
     setError("");
     try {
       setIsLoading(true);
+      const { getAuth, GoogleAuthProvider, signInWithPopup } = await import("firebase/auth");
+      const { auth } = await import("../firebase");
+      const googleProvider = new GoogleAuthProvider();
       await signInWithPopup(auth, googleProvider);
       setSuccessMessage("Signed in with Google!");
       setTimeout(() => onSuccess(), 1200);
     } catch (err) {
-      setError(err.message); // set error message
-      setTimeout(() => setError(""), 2000); // hide after 3 seconds
+      setError(err.message);
+      setTimeout(() => setError(""), 2000);
     } finally {
       setIsLoading(false);
     }
@@ -72,7 +71,6 @@ const Auth = ({ onSuccess, onClose }) => {
 
   return (
     <div className="flex flex-col justify-center items-center gap-3 text-zinc-800 w-full relative py-4 px-10">
-
       {/* SUCCESS MESSAGE */}
       {successMessage && (
         <div className="absolute top-0 left-1/2 -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded">
@@ -110,7 +108,7 @@ const Auth = ({ onSuccess, onClose }) => {
           onClick={handleGoogleSignIn}
           className="flex items-center gap-1 py-1 px-5 border border-zinc-400 bg-zinc-100 rounded"
         >
-          <img src={googleImage} alt="google icon" className="w-5"/>
+          <img src={googleImage} alt="google icon" className="w-5" />
           <span>Google</span>
         </button>
       </div>
@@ -165,7 +163,7 @@ const Auth = ({ onSuccess, onClose }) => {
       <p className="text-sm mt-2">
         {isSignUp ? (
           <>
-            Already have an account?{" "} 
+            Already have an account?{" "}
             <span
               className="font-semibold text-sm cursor-pointer hover:text-black/75"
               onClick={() => setIsSignUp(false)}

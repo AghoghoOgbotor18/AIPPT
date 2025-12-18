@@ -11,8 +11,8 @@ const Header = ({ setIsUser }) => {
     {name:"Contact", id:"footer"}
   ];
   
-  const [isOpen, setisOpen] = useState(false);
-  const toggleOpen = () => setisOpen(!isOpen);
+  const [isOpen, setIsOpen] = useState(false);
+  const toggleOpen = () => setIsOpen(!isOpen);
 
   const [active, setActive] = useState("hero");
 

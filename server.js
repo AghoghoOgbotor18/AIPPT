@@ -469,8 +469,8 @@ app.post("/api/generate-ppt-from-json", async (req, res) => {
         } else {
           // No image or minimalist: centered layout
           s.addText(slide.title || "", {
-            x: 1.5, y: layout.titleY,
-            w: 7, h: 0.8,
+            x: 0.5, y: layout.headerBar ? 0.15 : 0.5,
+            w: 9, h: 2.5,
             fontSize: titleFontSize - 8, bold: true,
             color: accentColor,
             align: layout.titleAlign,
@@ -632,7 +632,7 @@ async function generatePdfPreview(slidesJson, bgColor, textColor, accentColor, l
         `;
       } else if (slide.type === "content") {
         const pointsHtml = Array.isArray(slide.points) 
-          ? slide.points.map(pt => `<li style="width: 65%; margin-top:10px;"><strong>${pt.text}:</strong> ${pt.explanation}</li>`).join('')
+          ? slide.points.map(pt => `<li style="width: 100%; margin-top:10px;"><strong>${pt.text}:</strong> ${pt.explanation}</li>`).join('')
           : '';
         const imgHtml = slide.imageUrl 
           ? `<img src="${slide.imageUrl}" style="max-width: 300px; max-height: 300px; position: absolute; right: 40px; top: 110px;" />`
@@ -651,7 +651,7 @@ async function generatePdfPreview(slidesJson, bgColor, textColor, accentColor, l
         htmlContent += `
           <div class="slide" style="background: #${bgColor}; display: flex; flex-direction: column; justify-content: flex-start; height: 100vh">
             <h2>${slide.title || 'Conclusion'}</h2>
-            <p style="max-width: 80%;">${slide.text || ''}</p>
+            <p style="max-width: 100%;">${slide.text || ''}</p>
           </div>
         `;
       } else if (slide.type === "thank-you") {

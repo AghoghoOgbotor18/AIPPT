@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { lazy, Suspense, useState } from "react";
 import { useLocation } from "react-router-dom";
-import SlidesEditor from "../Components/Slides/SlidesEditor";
+const SlidesEditor = lazy(() => import("../Components/Slides/SlidesEditor"));
 
 const SlideReview = () => {
   const location = useLocation();
@@ -11,7 +11,9 @@ const SlideReview = () => {
   return (
     <div className="container mx-auto py-10">
       {slidesJson ? (
-        <SlidesEditor slidesJson={slidesJson} setSlidesJson={setSlidesJson} />
+        <Suspense fallback={<p>loading...</p>}>
+          <SlidesEditor slidesJson={slidesJson} setSlidesJson={setSlidesJson} />
+        </Suspense>
       ) : (
         <p className="text-gray-500 text-center">
           No slides found. Go back and generate again.

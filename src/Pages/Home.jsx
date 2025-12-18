@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../Components/Header";
 import Auth from "../Components/Auth";
-import Footer from "../Components/Footer";
+const Footer = lazy(() => import("../Components/Footer"));
 import Testimonials from "../Components/Testimonials";
 import FAQ from "../Components/FAQ";
 import Hero from "../Components/Hero";
@@ -71,7 +71,9 @@ const Home = ({ isLoggedIn, setIsLoggedIn }) => {
           </div>
         )}
       </main>
-      <Footer />
+      <Suspense fallback={<p>Loading...</p>}>
+        <Footer />
+      </Suspense>
     </div>
   );
 };

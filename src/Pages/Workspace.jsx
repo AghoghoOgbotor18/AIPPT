@@ -93,6 +93,12 @@ const Workspace = ({ setIsLoggedIn }) => {
     });
   }, [currentStep]);
 
+  //prefetch slideReview page
+  const prefetchSlideReview = () => {
+    import("../Pages/SlideReview");
+  }
+
+
   const slideStyles = [
     {
       value: 'corporate',
@@ -333,7 +339,7 @@ const Workspace = ({ setIsLoggedIn }) => {
                               e.target.style.boxShadow = 'none';
                             }}
                           >
-                            {[4,6,8,10,12,15,20].map(num => (
+                            {[4,6,8,10,12].map(num => (
                               <option key={num} value={num} style={{ backgroundColor: '#0a0c18' }}>{num} slides</option>
                             ))}
                           </select>
@@ -569,7 +575,7 @@ const Workspace = ({ setIsLoggedIn }) => {
                         onClick={handlePreview}
                         disabled={loading}
                         className="group flex items-center space-x-2 px-8 py-4 bg-linear-to-r from-blue-500 to-purple-500 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-105 disabled:opacity-60 disabled:cursor-not-allowed"
-                        
+                        onMouseEnter={prefetchSlideReview} onFocus={prefetchSlideReview}
                       >
                         <FaMagic />
                         <span>{loading ? "Creating..." : "Generate Slides"}</span>

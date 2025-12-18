@@ -81,16 +81,12 @@ const SlidesEditor = ({ slidesJson, setSlidesJson }) => {
         setGenerating(false);
         return;
       }
+      
       //cleanup when window closes
       newWindow.onbeforeunload = () => {
         if (pptxBlobUrl) URL.revokeObjectURL(pptxBlobUrl);
         if (pdfBlobUrl) URL.revokeObjectURL(pdfBlobUrl);
       };
-      //cleanup when user navigates away or component unmounts
-      window.addEventListener("beforeunload", () => {
-        if (pptxBlobUrl) URL.revokeObjectURL(pptxBlobUrl);
-        if (pdfBlobUrl) URL.revokeObjectURL(pdfBlobUrl);
-      });
 
       newWindow.document.write(`
         <!DOCTYPE html>
@@ -307,10 +303,14 @@ const SlidesEditor = ({ slidesJson, setSlidesJson }) => {
         </div>
         {/* Back to Top tooltip*/}
         <Tooltip text="Back to top">
-          <button className='fixed right-0 top-[50%] z-50 bg-white/5 px-4 py-4 rounded-full shadow-md animate-pulse' onClick={ScrollToTop}>
+          <button
+            onClick={ScrollToTop}
+            className="bg-white/5 px-4 py-4 rounded-full shadow-md animate-pulse"
+          >
             <FaArrowUp />
           </button>
         </Tooltip>
+
         
         {generating && (
           <div className='fixed inset-0 bg-black/60 backdrop-blur-md flex justify-center items-center z-50'>

@@ -4,7 +4,7 @@ import SlideCard from './SlideCard';
 import SlidePreview from './SlidePreview';
 import api from "../../Api/Api";
 import { useNavigate } from 'react-router-dom';
-import Tooltip from '../ToolTip';
+import Tooltip from '../Tooltip';
 
 const SlidesEditor = ({ slidesJson, setSlidesJson }) => {
   const [generating, setGenerating] = useState(false);
@@ -81,7 +81,7 @@ const SlidesEditor = ({ slidesJson, setSlidesJson }) => {
         setGenerating(false);
         return;
       }
-      
+
       //cleanup when window closes
       newWindow.onbeforeunload = () => {
         if (pptxBlobUrl) URL.revokeObjectURL(pptxBlobUrl);

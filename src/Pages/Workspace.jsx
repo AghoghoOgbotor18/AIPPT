@@ -48,7 +48,7 @@ const Workspace = ({ setIsLoggedIn }) => {
     setLoading(true);
     
     try {
-      const res = await api.post("/api/generate-slides", {
+      const res = await api.post("/generate-slides", {
         topic,
         presenterName,
         slideCount,
@@ -113,13 +113,6 @@ const Workspace = ({ setIsLoggedIn }) => {
       desc: 'Balanced & Authoritative',
       color: 'from-gray-500 to-gray-600',
       icon: <HiChartBar className="text-4xl text-gray-400" />
-    },
-    { 
-      value: 'playful', 
-      label: 'Playful', 
-      desc: 'Fun & Engaging', 
-      color: 'from-pink-500 to-pink-600', 
-      icon: <FaPalette className="text-4xl text-pink-500" />
     },
     {
       value: 'creative',

@@ -94,26 +94,18 @@ function getLayoutConfig(slideStyle) {
       imagePosition: 'right',
       headerBar: false
     },
-    playful: {
-      titleAlign: 'center',
-      titleY: 0.6,
-      contentAlign: 'center',
-      bulletStyle: false, // Use numbers or emojis
-      imagePosition: 'background',
-      headerBar: false
-    },
     creative: {
       titleAlign: 'left',
       titleY: 1.2,
       contentAlign: 'left',
       bulletStyle: true,
-      imagePosition: 'scattered', // Multiple small images
-      headerBar: false
+      imagePosition: 'right', 
+      headerBar: true
     },
     minimalist: {
-      titleAlign: 'center',
-      titleY: 1.5,
-      contentAlign: 'center',
+      titleAlign: 'left',
+      titleY: 0.8,
+      contentAlign: 'left',
       bulletStyle: false,
       imagePosition: 'none',
       headerBar: false
@@ -218,7 +210,6 @@ Generate a JSON object with this EXACT structure:
 }
 
 Style Guidelines for "${slideStyle}":
-${slideStyle === 'playful' ? '- Use fun, engaging language\n- Include emoji-friendly content' : ''}
 ${slideStyle === 'corporate' ? '- Use formal, business-appropriate language\n- Focus on data and metrics' : ''}
 ${slideStyle === 'creative' ? '- Use vivid, descriptive language\n- Include metaphors and storytelling' : ''}
 ${slideStyle === 'minimalist' ? '- Use concise, clear language\n- Fewer points, more impact' : ''}
@@ -334,8 +325,9 @@ app.post("/api/generate-ppt-from-json", async (req, res) => {
     // Get layout configuration
     const layout = getLayoutConfig(slideStyle);
 
-    // PRE-FETCH ALL IMAGES BEFORE CREATING SLIDES
+    // pre-fetch all images before generating
     const imageCache = {};
+    let creativeImageOnRight = true; // toggle for creative content slides
     for (const slide of slidesJson.slides) {
       if (slide.imageUrl) {
         try {
@@ -369,7 +361,7 @@ app.post("/api/generate-ppt-from-json", async (req, res) => {
         }
 
         // Title styling based on slide style
-        const titleY = slideStyle === 'playful' ? 1.8 : 1.5;
+        const titleY = 1.5;
         s.addText(slide.title || "", {
           x: 0.5, y: titleY, w: 9, h: 2,
           fontSize: titleFontSize + 12, bold: true, color: "FFFFFF",
@@ -388,7 +380,7 @@ app.post("/api/generate-ppt-from-json", async (req, res) => {
         // Add header bar for corporate style
         if (layout.headerBar) {
           s.addShape(ppt.ShapeType.rect, {
-            x: 0, y: 0, w: "100%", h: 0.8,
+            x: 0, y: 0, w: "100%", h: 0.9,
             fill: { color: accentColor }
           });
         }
@@ -418,10 +410,93 @@ app.post("/api/generate-ppt-from-json", async (req, res) => {
         // Add header bar for corporate style
         if (layout.headerBar) {
           s.addShape(ppt.ShapeType.rect, {
-            x: 0, y: 0, w: "100%", h: 0.7,
+            x: 0, y: 0, w: "100%", h: 0.9,
             fill: { color: accentColor }
           });
         }
+
+        //creative slide styling
+        if (
+          slideStyle === "creative" &&
+          hasImage &&
+          layout.imagePosition === "right"
+        ) {
+          const imageOnRight = creativeImageOnRight;
+          creativeImageOnRight = !creativeImageOnRight; // flip for next image slide
+
+          // Header bar
+          s.addShape(ppt.ShapeType.rect, {
+            x: 0,
+            y: 0,
+            w: "100%",
+            h: 0.9,
+            fill: { color: accentColor }
+          });
+
+          // LEFT / RIGHT panel logic
+          const textX = imageOnRight ? 0 : 3.5;
+          const imageX = imageOnRight ? 6.5 : 0;
+
+          // Text background panel (below header)
+          s.addShape(ppt.ShapeType.rect, {
+            x: textX,
+            y: 0.9,
+            w: 6.5,
+            h: 5.3,
+            fill: { color: bgColor }
+          });
+
+          // Title
+          s.addText(slide.title || "", {
+            x: 0.5,
+            y: 0.15,
+            w: 9,
+            h: 0.6,
+            fontSize: titleFontSize - 12,
+            bold: true,
+            color: "FFFFFF",
+            fontFace: fontStyle,
+            align: "left"
+          });
+
+          // Bullet points
+          if (Array.isArray(slide.points) && slide.points.length > 0) {
+            const bulletItems = slide.points.map(pt => ({
+              text: `${pt.text}: ${pt.explanation}`,
+              options: {
+                bullet: { indent: 10 },
+                indentLevel: 0
+              }
+            }));
+
+            s.addText(bulletItems, {
+              x: textX + 0.5,
+              y: 1.3,
+              w: 5.5,
+              h: 4.3,
+              fontSize: textFontSize - 2,
+              color: textColor,
+              valign: "top",
+              fontFace: fontStyle,
+              lineSpacing: 20,
+              margin: 0.3
+            });
+          }
+
+          // Image (full height below header)
+          s.addImage({
+            data: imageCache[slide.imageUrl],
+            x: imageX,
+            y: 0.9,
+            w: 3.5,
+            h: 5.3,
+            sizing: { type: "cover" }
+          });
+
+          continue; 
+        }
+
+
 
         if (hasImage && layout.imagePosition === 'right') {
           // Layout with image on right
@@ -436,9 +511,7 @@ app.post("/api/generate-ppt-from-json", async (req, res) => {
 
           if (Array.isArray(slide.points) && slide.points.length > 0) {
             const bulletItems = slide.points.map((pt, idx) => ({
-              text: slideStyle === 'playful' 
-                ? `${['*', '-', '~', '>', '<'][idx % 5]} ${pt.text}: ${pt.explanation}`
-                : `${pt.text}: ${pt.explanation}`,
+              text: `${pt.text}: ${pt.explanation}`,
               options: { 
                 bullet: layout.bulletStyle ? { indent: 10 }
                 : { type: 'number', indent: 10 },
@@ -469,20 +542,18 @@ app.post("/api/generate-ppt-from-json", async (req, res) => {
         } else {
           // No image or minimalist: centered layout
           s.addText(slide.title || "", {
-            x: 0.5, y: layout.headerBar ? 0.15 : 0.5,
-            w: 9, h: 2.5,
-            fontSize: titleFontSize - 8, bold: true,
-            color: accentColor,
-            align: layout.titleAlign,
-            fontFace: fontStyle
+            x: 0.5, y: layout.headerBar ? 0.12 : 0.4,
+            w: 9, h: 0.6,
+            fontSize: titleFontSize - 12, bold: true,
+            color: layout.headerBar ? "FFFFFF" : accentColor,
+            fontFace: fontStyle,
+            align: layout.titleAlign
           });
 
           if (Array.isArray(slide.points) && slide.points.length > 0) {
             const bulletItems = slide.points.map((pt, idx) => ({
-              text: slideStyle === 'playful'
-                ? `${['*', '-', '~', '>', '<'][idx % 5]} ${pt.text}: ${pt.explanation}`
-                : slideStyle === 'minimalist'
-                ? `${pt.text}`
+              text: slideStyle === 'minimalist'
+                ? `${pt.text}: ${pt.explanation}`
                 : `${pt.text}: ${pt.explanation}`,
               options: { 
                 bullet: layout.bulletStyle ? { indent: 10 }
@@ -492,12 +563,12 @@ app.post("/api/generate-ppt-from-json", async (req, res) => {
             }));
 
             s.addText(bulletItems, {
-              x: 1.5,
-              y: layout.titleY + 1,
-              w: 7, h: 3,
-              fontSize: textFontSize,
+              x: 0.5,
+              y: layout.headerBar ? 1.3 : 1.2,
+              w: 9, h: 4.3,
+              fontSize: textFontSize - 2,
               color: textColor,
-              align: layout.contentAlign,
+              valign: "top",
               fontFace: fontStyle,
               lineSpacing: 20,
               margin: 0.3
@@ -510,7 +581,7 @@ app.post("/api/generate-ppt-from-json", async (req, res) => {
         // Add header bar for corporate style
         if (layout.headerBar) {
           s.addShape(ppt.ShapeType.rect, {
-            x: 0, y: 0, w: "100%", h: 0.7,
+            x: 0, y: 0, w: "100%", h: 0.9,
             fill: { color: accentColor }
           });
         }

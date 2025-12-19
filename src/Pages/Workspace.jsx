@@ -48,7 +48,7 @@ const Workspace = ({ setIsLoggedIn }) => {
     setLoading(true);
     
     try {
-      const res = await api.post("/generate-slides", {
+      const res = await api.post("/api/generate-slides", {
         topic,
         presenterName,
         slideCount,

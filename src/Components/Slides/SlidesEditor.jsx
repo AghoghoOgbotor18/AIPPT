@@ -40,7 +40,7 @@ const SlidesEditor = ({ slidesJson, setSlidesJson }) => {
       setGenerating(true);
 
       const res = await api.post(
-        "/generate-ppt-from-json",
+        "/api/generate-ppt-from-json",
         slidesJson
       );
 

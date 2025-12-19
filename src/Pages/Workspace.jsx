@@ -13,7 +13,8 @@ import {
   FaBolt,
   FaRegDotCircle,
   FaBriefcase,
-  FaArrowLeft
+  FaArrowLeft,
+  FaLightbulb
 } from 'react-icons/fa';
 import { HiChartBar } from "react-icons/hi";
 import { PiSparkleFill } from "react-icons/pi";
@@ -567,7 +568,7 @@ const Workspace = ({ setIsLoggedIn }) => {
                       <button
                         onClick={handlePreview}
                         disabled={loading}
-                        className="group flex items-center space-x-2 px-8 py-4 bg-linear-to-r from-blue-500 to-purple-500 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-105 disabled:opacity-60 disabled:cursor-not-allowed"
+                        className="group flex items-center space-x-2 px-11 py-4 bg-linear-to-r from-blue-500 to-purple-500 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-105 disabled:opacity-60 disabled:cursor-not-allowed"
                         onMouseEnter={prefetchSlideReview} onFocus={prefetchSlideReview}
                       >
                         <FaMagic />
@@ -587,7 +588,7 @@ const Workspace = ({ setIsLoggedIn }) => {
             <div className="bg-white/5 backdrop-blur-sm p-4 rounded-xl border border-white/10 hover:bg-white/10 hover:border-white/20 transition">
               <div className="flex items-start space-x-3">
                 <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center flex-shrink-0 border border-blue-500/30">
-                  💡
+                  <FaLightbulb className="text-yellow-400" />
                 </div>
                 <div>
                   <h4 className="font-semibold text-sm mb-1 text-white">Be Specific</h4>
@@ -599,7 +600,7 @@ const Workspace = ({ setIsLoggedIn }) => {
             <div className="bg-white/5 backdrop-blur-sm p-4 rounded-xl border border-white/10 hover:bg-white/10 hover:border-white/20 transition">
               <div className="flex items-start space-x-3">
                 <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center flex-shrink-0 border border-purple-500/30">
-                  🎨
+                  <FaPalette className="text-pink-400" />
                 </div>
                 <div>
                   <h4 className="font-semibold text-sm mb-1 text-white">Try Styles</h4>

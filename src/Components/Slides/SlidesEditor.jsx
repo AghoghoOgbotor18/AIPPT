@@ -108,7 +108,7 @@ const SlidesEditor = ({ slidesJson, setSlidesJson }) => {
               }
               .header {
                 background: #0a0c16;
-                padding: 16px 32px;
+                padding: 20px 32px;
                 box-shadow: 0 2px 4px rgba(0,0,0,0.1);
                 display: flex;
                 justify-content: space-between;
@@ -125,12 +125,12 @@ const SlidesEditor = ({ slidesJson, setSlidesJson }) => {
                 display: inline-flex;
                 align-items: center;
                 gap: 8px;
-                padding: 12px 20px;
+                padding: 15px 23px;
                 background: linear-gradient(to right, #622ba4, #b856ca);
                 color: white;
                 text-decoration: none;
                 border-radius: 8px;
-                font-size: 14px;
+                font-size: 20px;
                 font-weight: 500;
                 transition: background 0.2s;
                 border: none;
@@ -167,11 +167,11 @@ const SlidesEditor = ({ slidesJson, setSlidesJson }) => {
               }
               .no-preview {
                 text-align: center;
-                color: #9ca3af;
+                color: #0a0c12;
                 padding: 40px;
               }
               .no-preview h2 {
-                font-size: 20px;
+                font-size: 25px;
                 margin-bottom: 10px;
               }
             </style>
@@ -191,7 +191,7 @@ const SlidesEditor = ({ slidesJson, setSlidesJson }) => {
               ${pdfBlobUrl ? 
                 `<embed src="${pdfBlobUrl}#toolbar=0&navpanes=0&scrollbar=0&view=Fit" type="application/pdf" class="pdf-embed" />` :
                 `<div class="no-preview">
-                  <h2>Preview not available</h2>
+                  <h2>Preview not available for this hosting</h2>
                   <p>Click the download button above to get your PowerPoint file</p>
                 </div>`
               }
@@ -305,7 +305,7 @@ const SlidesEditor = ({ slidesJson, setSlidesJson }) => {
         <Tooltip text="Back to top">
           <button
             onClick={ScrollToTop}
-            className="bg-white/5 px-4 py-4 rounded-full shadow-md animate-pulse"
+            className="bg-white/20 px-4 py-4 rounded-full shadow-md animate-pulse"
           >
             <FaArrowUp />
           </button>
